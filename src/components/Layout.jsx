@@ -10,7 +10,7 @@ export default function Layout({ page, setPage, theme, setTheme, children }) {
       <ThemeToggle theme={theme} onChange={setTheme} />
     </header>
     <Timer active={page === 'quiz'} />
-    <main>{children}</main>
+    <main className={page === 'quiz' ? 'main-with-timer' : ''}>{children}</main>
     <footer>Estudos OAB · organize seus estudos com consistência</footer>
   </div>
 }
