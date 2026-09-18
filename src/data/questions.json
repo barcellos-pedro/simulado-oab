@@ -1,0 +1,4 @@
+{
+  "_readme": "Substitua este array pelos dados extraídos dos PDFs em docs/. Cada questão deve ter id, subject, question, options (array), answer (índice) e explanation.",
+  "questions": []
+}
