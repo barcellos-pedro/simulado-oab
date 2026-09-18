@@ -10,11 +10,13 @@ npm run prepare:content
 npm run dev
 ```
 
-O comando `npm run prepare:content` lê todos os PDFs em `docs/`, salva o texto
-extraído em `src/data/extracted/` e gera `src/data/questions.json` a partir dos
-pares `45/46/47-prova.pdf` e `45/46/47-gabarito.pdf`. A identificação automática
-é uma etapa inicial: revise os blocos, alternativas e justificativas antes de
-publicar o banco de questões.
+O comando `npm run prepare:content` lê todos os PDFs em `docs/`, gera arquivos
+JSON estruturados em `src/data/extracted/` e produz `src/data/questions.json` a
+partir dos pares `45/46/47-prova.pdf` e `45/46/47-gabarito.pdf`. Os arquivos de
+prova têm questões e alternativas separadas por campos; os gabaritos têm um
+mapa de número para letra; a pesquisa tem seções de texto. A identificação
+automática é uma etapa inicial: revise os blocos, alternativas e justificativas
+antes de publicar o banco de questões.
 
 Para validar uma build de produção: `npm run build`.
 

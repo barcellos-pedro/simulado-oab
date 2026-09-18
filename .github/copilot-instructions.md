@@ -54,7 +54,7 @@ revisão de `src/data/questions.json`.
 
 Os arquivos fonte ficam em `docs/`. O script
 `scripts/prepare-content.mjs` usa `pdf-parse`, extrai todos os PDFs para
-`src/data/extracted/*.txt` e tenta montar questões para os pares
+arquivos JSON estruturados em `src/data/extracted/` e tenta montar questões para os pares
 `45/46/47-prova.pdf` e `45/46/47-gabarito.pdf`. O parser é uma etapa
 heurística: revise enunciados, alternativas, gabaritos e justificativas antes
 de considerar o banco pronto. `docs/pesquisa.pdf` alimenta a página de pesquisa,
