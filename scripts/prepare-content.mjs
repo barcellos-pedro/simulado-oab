@@ -85,8 +85,7 @@ function parseQuestions(text, examNumber, answerKey) {
       question: statement,
       options,
       answer,
-      answerLetter,
-      explanation: ''
+      answerLetter
     })
   }
 
