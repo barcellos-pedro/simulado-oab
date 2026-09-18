@@ -23,14 +23,22 @@ npm run prepare:content  # extrai os PDFs de docs/ e gera os dados do quiz
 npm run dev              # servidor Vite de desenvolvimento
 npm run build            # build de produção e artefatos PWA
 npm run preview          # serve o build de produção localmente
+npm run format           # formata os arquivos com Prettier
 ```
 
-Não há scripts de teste, lint ou formatador configurados, nem runner para
-executar um teste individual. A validação padrão é `npm run build`; para
-mudanças no conteúdo, execute `npm run prepare:content` e revise o diff de
-`src/data/questions.json` e de `src/data/extracted/`. Para validar o
-comportamento instalável/offline, execute `npm run build`, depois
-`npm run preview`, e teste a instalação e o carregamento sem rede no navegador.
+Não há scripts de teste ou lint configurados, nem runner para executar um teste
+individual. Use `npm run format` somente quando a alteração exigir formatação;
+antes de finalizar, a validação padrão é `npm run build`. Para mudanças no
+conteúdo, execute `npm run prepare:content` e revise o diff de
+`src/data/questions.json` e de `src/data/extracted/`, pois a extração é
+heurística. Para validar o comportamento instalável/offline, execute `npm run
+build`, depois `npm run preview`, e teste a instalação e o carregamento sem rede
+no navegador.
+
+Consulte o [README](../README.md) para o fluxo de uso e os detalhes
+documentais; consulte o [PLAN](../PLAN.md) para decisões e escopo do produto.
+Não replique esses documentos nesta instrução quando apenas um link for
+suficiente.
 
 ## Arquitetura
 
@@ -61,8 +69,9 @@ comportamento instalável/offline, execute `npm run build`, depois
   somente a apresentação. O reset de uma nova tentativa usa o evento local
   `oab:timer-reset`.
 - `src/data/questions.json` é importado em build e precisa manter o formato
-  `{ questions: [...] }`. Cada questão deve possuir `id`, `subject`, `question`,
-  `options`, `answer` (índice numérico) e `explanation`.
+  `{ questions: [...] }`. Preserve os campos consumidos pelos componentes,
+  incluindo `id`, `exam`, `number`, `subject`, `question`, `options`, `answer` e
+  `answerLetter`.
 
 ## Preparação dos PDFs
 
@@ -93,6 +102,8 @@ nova extração heurística sem verificar o diff.
   alterar os metadados do PWA.
 - O teste manual do PWA deve usar `npm run build` e `npm run preview`, abrir a
   aplicação em navegador compatível, instalar e verificar o carregamento offline.
+- Não remova `docs/pesquisa.pdf` nem o caminho `/docs/pesquisa.pdf`: o arquivo é
+  emitido pelo `researchPdfPlugin` no build e servido por ele durante o dev.
 
 ## Convenções específicas
 
@@ -114,3 +125,15 @@ nova extração heurística sem verificar o diff.
 - O projeto usa `React.StrictMode` em `src/main.jsx`; efeitos que inicializam
   persistência, timers ou listeners devem ser seguros para a montagem de
   desenvolvimento repetida.
+
+## Fluxo de alteração
+
+- Antes de editar uma tela, siga o estado de navegação em `src/App.jsx` e a
+  entrada correspondente em `src/components/Layout.jsx`.
+- Prefira os componentes, hooks e classes CSS existentes; não introduza React
+  Router, TypeScript ou um backend para resolver necessidades locais.
+- Após editar código, execute `npm run build`. Após editar PDFs ou o parser,
+  execute `npm run prepare:content`, revise os artefatos gerados e então rode o
+  build. Não sobrescreva conteúdo revisado sem inspecionar o diff.
+- Não faça commit nem altere arquivos gerados ou PDFs sem que a tarefa peça
+  explicitamente.
