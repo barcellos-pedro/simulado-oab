@@ -39,7 +39,17 @@ export default function Layout({
       <main className={page === "quiz" ? "main-with-timer" : ""}>
         {children}
       </main>
-      <footer>Estudos OAB · organize seus estudos com consistência</footer>
+      <footer>
+        <span>© {new Date().getFullYear()} Estudos OAB</span>
+        <span> · Feito com 💙 por </span>
+        <a
+          href="https://pedroreis.dev/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Pedro Barcellos
+        </a>
+      </footer>
     </div>
   );
 }
