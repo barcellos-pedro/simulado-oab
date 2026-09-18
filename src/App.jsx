@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import Layout from "./components/Layout";
+import SplashScreen from "./components/SplashScreen";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { clearTimer } from "./utils/timer";
 import "./home.css";
@@ -269,12 +270,15 @@ export default function App() {
       <Search questions={questions} />
     );
   return (
-    <Layout
-      {...{ page, setPage, theme, setTheme }}
-      timerActive={page === "quiz" && Boolean(selectedExam)}
-      timerPaused={quizPaused}
-    >
-      <Suspense fallback={<PageLoading />}>{content}</Suspense>
-    </Layout>
+    <>
+      <SplashScreen />
+      <Layout
+        {...{ page, setPage, theme, setTheme }}
+        timerActive={page === "quiz" && Boolean(selectedExam)}
+        timerPaused={quizPaused}
+      >
+        <Suspense fallback={<PageLoading />}>{content}</Suspense>
+      </Layout>
+    </>
   );
 }
