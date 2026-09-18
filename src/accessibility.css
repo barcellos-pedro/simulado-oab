@@ -1,0 +1,48 @@
+:root {
+  --muted-text: #526078;
+}
+
+.topbar nav button,
+.theme-toggle button,
+.hero p,
+.page-heading p,
+.stats span,
+.muted,
+.attempt small,
+.exam-card-copy small,
+.results article p,
+.empty-state,
+.home-intro,
+.home-proof,
+.benefit-list p,
+.process-steps p,
+footer {
+  color: var(--muted-text);
+}
+
+.dark {
+  --muted-text: #aab6c9;
+}
+
+.dark .topbar nav button,
+.dark .theme-toggle button,
+.dark .hero p,
+.dark .page-heading p,
+.dark .stats span,
+.dark .muted,
+.dark .attempt small,
+.dark .exam-card-copy small,
+.dark .results article p,
+.dark .empty-state,
+.dark .home-intro,
+.dark .home-proof,
+.dark .benefit-list p,
+.dark .process-steps p,
+.dark footer {
+  color: var(--muted-text);
+}
+
+.page-loading {
+  min-height: 280px;
+  margin: 80px auto;
+}

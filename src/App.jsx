@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import Layout from './components/Layout'
-import Quiz from './components/Quiz'
-import Dashboard from './components/Dashboard'
-import Search from './components/Search'
-import Research from './components/Research'
-import ExamSelection from './components/ExamSelection'
 import { useLocalStorage } from './hooks/useLocalStorage'
-import data from './data/questions.json'
 import './home.css'
+
+const Quiz = lazy(() => import('./components/Quiz'))
+const Dashboard = lazy(() => import('./components/Dashboard'))
+const Search = lazy(() => import('./components/Search'))
+const Research = lazy(() => import('./components/Research'))
+const ExamSelection = lazy(() => import('./components/ExamSelection'))
+
+function PageLoading() {
+  return <section className="empty-state page-loading" role="status" aria-live="polite"><span>...</span><h2>Carregando conteúdo</h2></section>
+}
 
 function Home({ setPage }) {
   return <div className="home-page">
@@ -79,11 +83,19 @@ export default function App() {
   const [attempts, setAttempts] = useLocalStorage('oab-attempts', [])
   const [selectedExam, setSelectedExam] = useState(null)
   const [quizPaused, setQuizPaused] = useState(false)
-  const [questions] = useState(data.questions)
+  const [questions, setQuestions] = useState(null)
   useEffect(() => {
     const dark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
     document.documentElement.classList.toggle('dark', dark)
   }, [theme])
+  useEffect(() => {
+    if (page !== 'quiz' && page !== 'search') return
+    let active = true
+    import('./data/questions.json').then(module => {
+      if (active) setQuestions(module.default.questions)
+    })
+    return () => { active = false }
+  }, [page])
   const selectExam = exam => {
     localStorage.removeItem('oab-timer-deadline')
     localStorage.removeItem('oab-timer-started-at')
@@ -100,6 +112,7 @@ export default function App() {
     setQuizPaused(false)
     setPage('quiz')
   }
-  const quizQuestions = selectedExam ? questions.filter(question => question.exam === selectedExam).slice(0, 80) : []
-  return <Layout {...{ page, setPage, theme, setTheme }} timerActive={page === 'quiz' && Boolean(selectedExam)} timerPaused={quizPaused}>{page === 'home' ? <Home setPage={setPage} /> : page === 'quiz' ? selectedExam ? <Quiz key={selectedExam} exam={selectedExam} questions={quizQuestions} paused={quizPaused} onTogglePause={() => setQuizPaused(value => !value)} onRestart={() => setQuizPaused(false)} onExit={exitQuiz} saveAttempt={a => setAttempts(current => [...current, a])} /> : <ExamSelection questions={questions} onSelect={selectExam} /> : page === 'dashboard' ? <Dashboard attempts={attempts} /> : page === 'research' ? <Research /> : <Search questions={questions} />}</Layout>
+  const quizQuestions = selectedExam && questions ? questions.filter(question => question.exam === selectedExam).slice(0, 80) : []
+  const content = page === 'home' ? <Home setPage={setPage} /> : page === 'quiz' ? !questions ? <PageLoading /> : selectedExam ? <Quiz key={selectedExam} exam={selectedExam} questions={quizQuestions} paused={quizPaused} onTogglePause={() => setQuizPaused(value => !value)} onRestart={() => setQuizPaused(false)} onExit={exitQuiz} saveAttempt={a => setAttempts(current => [...current, a])} /> : <ExamSelection questions={questions} onSelect={selectExam} /> : page === 'dashboard' ? <Dashboard attempts={attempts} /> : page === 'research' ? <Research /> : !questions ? <PageLoading /> : <Search questions={questions} />
+  return <Layout {...{ page, setPage, theme, setTheme }} timerActive={page === 'quiz' && Boolean(selectedExam)} timerPaused={quizPaused}><Suspense fallback={<PageLoading />}>{content}</Suspense></Layout>
 }
