@@ -24,3 +24,7 @@ pnpm-debug.log*
 
 # Temporary extraction output
 src/data/extracted/*.tmp
+
+# Local agent tooling
+.agents/
+skills-lock.json
