@@ -45,6 +45,14 @@ export default function Layout({
         <a href="https://pedroreis.dev/" target="_blank" rel="noreferrer">
           Pedro Barcellos
         </a>
+        <span> · </span>
+        <a
+          href="https://github.com/barcellos-pedro/simulado-oab"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Repositório
+        </a>
       </footer>
     </div>
   );
