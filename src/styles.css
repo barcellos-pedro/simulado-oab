@@ -409,8 +409,8 @@ body {
   margin: 72px auto;
 }
 .quiz-card h1 {
-  font-size: 25px;
-  line-height: 1.3;
+  font-size: 20px;
+  line-height: 1.45;
 }
 .options {
   display: grid;
@@ -730,8 +730,8 @@ footer {
   margin: 72px auto;
 }
 .quiz-card h1 {
-  font-size: 25px;
-  line-height: 1.3;
+  font-size: 20px;
+  line-height: 1.45;
 }
 .options {
   display: grid;
