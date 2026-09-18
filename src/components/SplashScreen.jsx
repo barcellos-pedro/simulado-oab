@@ -7,8 +7,8 @@ function isInstalledPwa() {
   if (typeof window === "undefined") return false;
 
   const displayModes = ["standalone", "fullscreen", "minimal-ui"];
-  const hasInstalledDisplayMode = displayModes.some((mode) =>
-    window.matchMedia(`(display-mode: ${mode})`).matches,
+  const hasInstalledDisplayMode = displayModes.some(
+    (mode) => window.matchMedia(`(display-mode: ${mode})`).matches,
   );
 
   return hasInstalledDisplayMode || window.navigator.standalone === true;

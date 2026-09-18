@@ -1,16 +1,46 @@
+<div align="center">
+  <img src="public/favicon.svg" alt="" width="72" />
+
 # Estudos OAB
 
-Aplicação web instalável (PWA) para praticar questões da OAB, desenvolvida com
-React, Vite, Tailwind CSS e `lucide-react`. O conteúdo é carregado localmente,
-sem backend ou necessidade de conexão depois que os recursos são armazenados
-pelo service worker.
+**Simulados, revisão e acompanhamento para a prova da OAB.**
 
-## Requisitos
+[![React](https://img.shields.io/badge/React-18-149eca?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646cff?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
+[![PWA](https://img.shields.io/badge/PWA-instalável-335cff?style=flat-square)](https://web.dev/progressive-web-apps/)
 
-- Node.js 18 ou superior
+[Recursos](#recursos) · [Início rápido](#início-rápido) · [Comandos](#comandos) · [Conteúdo](#conteúdo) · [PWA e offline](#pwa-e-offline)
+</div>
+
+Estudos OAB é uma aplicação web instalável para praticar as questões dos 45º,
+46º e 47º Exames Unificados. O quiz, as explicações, o histórico e o estado do
+cronômetro são carregados e armazenados localmente: não há backend, conta ou
+sincronização entre dispositivos.
+
+> [!NOTE]
+> O projeto é uma ferramenta de estudo. As explicações são resumos informativos
+> e a página de pesquisa apresenta tendências históricas, não previsões ou
+> orientação jurídica.
+
+## Recursos
+
+- **240 questões locais:** 80 questões de cada um dos três exames disponíveis.
+- **Simulado por exame:** escolha a prova e avance por uma sessão de até 80 questões.
+- **Feedback imediato:** a resposta é bloqueada após a seleção e o gabarito é exibido com a explicação disponível.
+- **Cronômetro de prova:** cinco horas, com pausa, reinício, minimização e ocultação sem perder o estado ao recarregar a página.
+- **Desempenho:** acompanhe questões respondidas, acertos, erros, duração média e histórico das tentativas.
+- **Pesquisa:** encontre questões por enunciado, disciplina ou explicação no banco local.
+- **Pesquisa documental:** consulte a análise das provas recentes e o PDF original em `docs/pesquisa.pdf`.
+- **Experiência instalável:** tema claro, escuro ou do sistema, manifest e service worker gerados pelo `vite-plugin-pwa`.
+
+## Início rápido
+
+### Requisitos
+
+- [Node.js](https://nodejs.org/) 18 ou superior
 - npm
 
-## Instalação e desenvolvimento
+### Instalar e executar
 
 ```bash
 npm install
@@ -18,79 +48,74 @@ npm run prepare:content
 npm run dev
 ```
 
-O comando `npm run dev` inicia o servidor de desenvolvimento. Para gerar e
-visualizar a versão de produção:
+Abra o endereço local exibido pelo Vite. O comando `prepare:content` só é
+necessário quando os PDFs em `docs/` forem alterados ou quando o conteúdo
+gerado precisar ser reconstruído.
+
+## Comandos
+
+| Comando                   | Finalidade                                         |
+| ------------------------- | -------------------------------------------------- |
+| `npm install`             | Instala as dependências do projeto.                |
+| `npm run prepare:content` | Extrai os PDFs e atualiza os JSONs em `src/data/`. |
+| `npm run dev`             | Inicia o servidor de desenvolvimento do Vite.      |
+| `npm run build`           | Gera a build de produção e os artefatos do PWA.    |
+| `npm run preview`         | Serve localmente a build de produção.              |
+| `npm run format`          | Formata os arquivos com Prettier.                  |
+
+Para conferir a versão de produção:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Comandos disponíveis:
+## Conteúdo
 
-| Comando                   | Finalidade                                     |
-| ------------------------- | ---------------------------------------------- |
-| `npm install`             | Instala as dependências                        |
-| `npm run prepare:content` | Extrai os PDFs e atualiza os JSONs de conteúdo |
-| `npm run dev`             | Inicia o Vite em modo de desenvolvimento       |
-| `npm run build`           | Gera a build de produção e os artefatos PWA    |
-| `npm run preview`         | Serve a build de produção localmente           |
+Os PDFs-fonte ficam em `docs/`. O script `scripts/prepare-content.mjs` usa
+`pdf-parse` para:
 
-## Funcionalidades
+1. extrair o texto dos PDFs de prova, gabarito e pesquisa;
+2. associar as respostas da seção `PROVA TIPO 1` às questões numeradas;
+3. gravar os documentos intermediários em `src/data/extracted/`;
+4. gerar `src/data/questions.json` no formato consumido pelo quiz.
 
-- Seleção do exame antes de iniciar o simulado: 45º, 46º ou 47º Exame
-  Unificado.
-- Até 80 questões por sessão, filtradas pelo exame escolhido.
-- Feedback imediato, bloqueio da alternativa após a resposta e indicação do
-  gabarito.
-- Controles durante o simulado para pausar/continuar, reiniciar ou sair.
-- Cronômetro regressivo de 5 horas. O tempo pausado é congelado e compensado
-  quando a sessão é retomada; minimizar ou ocultar o relógio não interrompe a
-  contagem.
-- Dashboard com total de questões, acertos, erros, percentual, duração e
-  histórico das tentativas anteriores.
-- Pesquisa no banco local de questões.
-- Página dedicada à pesquisa das provas recentes, com acesso a
-  `docs/pesquisa.pdf`.
-- Tema claro, escuro ou baseado no sistema, persistido no navegador.
-- Manifest, ícones e service worker gerados por `vite-plugin-pwa`.
+Os arquivos gerados incluem `45-prova.json`, `45-gabarito.json`,
+`46-prova.json`, `46-gabarito.json`, `47-prova.json`, `47-gabarito.json`,
+`pesquisa.json` e o banco consolidado `questions.json`.
 
-O histórico de tentativas, o tema e o estado do cronômetro ficam salvos apenas no
-navegador atual. Reiniciar descarta o progresso da sessão; sair retorna à
-seleção de exames sem registrar uma tentativa incompleta.
+> [!IMPORTANT]
+> A extração e a associação do gabarito são heurísticas. Depois de executar
+> `npm run prepare:content`, revise o diff das questões, alternativas, respostas
+> e explicações antes de publicar uma nova versão do conteúdo.
 
-## Integração dos PDFs
+## Arquitetura
 
-Os PDFs originais ficam em `docs/`. O script
-`scripts/prepare-content.mjs` extrai os documentos e gera:
+- `src/main.jsx` monta a aplicação React.
+- `src/App.jsx` controla a navegação por estado entre início, quiz, desempenho, pesquisa de questões e pesquisa documental.
+- `src/components/` contém as telas e controles, incluindo `Quiz`, `Dashboard`, `Search`, `Research`, `Timer` e seleção de exame.
+- `src/hooks/useLocalStorage.js` centraliza a persistência local em JSON.
+- `src/utils/timer.js` mantém deadline, início e pausa do cronômetro.
+- `vite.config.js` configura o React, o PWA e a entrega de `docs/pesquisa.pdf` no desenvolvimento e no build.
 
-- `src/data/extracted/45-prova.json`
-- `src/data/extracted/45-gabarito.json`
-- `src/data/extracted/46-prova.json`
-- `src/data/extracted/46-gabarito.json`
-- `src/data/extracted/47-prova.json`
-- `src/data/extracted/47-gabarito.json`
-- `src/data/extracted/pesquisa.json`
-- `src/data/questions.json`
+## PWA e offline
 
-O banco atual contém 240 questões, sendo 80 de cada exame. A extração e a
-associação do gabarito são heurísticas; revise o conteúdo jurídico antes de
-publicá-lo como material editorial definitivo. As explicações importadas que
-ainda não passaram por revisão são identificadas no próprio JSON.
-
-## Testar o PWA
-
-Depois de executar `npm run build`, inicie o servidor de produção com:
+O build copia o PDF de pesquisa para `dist/docs/pesquisa.pdf` e gera o manifest
+e o service worker. Para validar a instalação e o carregamento offline:
 
 ```bash
+npm run build
 npm run preview
 ```
 
-Abra o endereço exibido pelo Vite em um navegador compatível. O navegador deve
-exibir a opção de instalar o Estudos OAB na barra de endereço ou no menu de
-compartilhamento. Depois da instalação, ative o modo offline nas ferramentas de
-desenvolvedor e confirme que a aplicação continua acessível.
+Abra a URL exibida pelo Vite em um navegador compatível, instale o aplicativo e
+confirme o carregamento após habilitar o modo offline nas ferramentas de
+desenvolvedor. Ao publicar a aplicação, mantenha o caminho
+`/docs/pesquisa.pdf` disponível.
 
-O build também copia o PDF de pesquisa para `dist/docs/pesquisa.pdf`; esse
-recurso precisa ser mantido no deploy para que o link da página de pesquisa
-continue funcionando.
+### Dados locais
+
+As tentativas, o tema e as referências do cronômetro ficam no `localStorage` do
+navegador atual. Limpar os dados do site remove esse estado; iniciar em outro
+navegador ou dispositivo não recupera o histórico. Reiniciar ou abandonar um
+simulado descarta a tentativa incompleta.

@@ -42,11 +42,7 @@ export default function Layout({
       <footer>
         <span>© {new Date().getFullYear()} Estudos OAB</span>
         <span> · Feito com 💙 por </span>
-        <a
-          href="https://pedroreis.dev/"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href="https://pedroreis.dev/" target="_blank" rel="noreferrer">
           Pedro Barcellos
         </a>
       </footer>
