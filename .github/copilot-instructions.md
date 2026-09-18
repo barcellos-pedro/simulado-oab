@@ -1,5 +1,13 @@
 # Instruções para Copilot
 
+## Contexto do projeto
+
+Estudos OAB é uma PWA em React 18 + Vite para praticar as questões dos 45º,
+46º e 47º Exames Unificados da OAB. O conteúdo, o histórico e o estado do
+cronômetro são locais: não há backend, API ou sincronização entre dispositivos.
+O código usa ESM (`"type": "module"`), JavaScript/JSX e componentes funcionais;
+não há TypeScript.
+
 ## Comandos do projeto
 
 Instale as dependências antes de executar os comandos:
@@ -17,10 +25,12 @@ npm run build            # build de produção e artefatos PWA
 npm run preview          # serve o build de produção localmente
 ```
 
-O repositório não possui scripts de teste ou lint configurados. Não há teste
-unitário individual disponível; para validar uma mudança, use `npm run build` e,
-quando a mudança envolver conteúdo, `npm run prepare:content` seguido de uma
-revisão de `src/data/questions.json`.
+Não há scripts de teste, lint ou formatador configurados, nem runner para
+executar um teste individual. A validação padrão é `npm run build`; para
+mudanças no conteúdo, execute `npm run prepare:content` e revise o diff de
+`src/data/questions.json` e de `src/data/extracted/`. Para validar o
+comportamento instalável/offline, execute `npm run build`, depois
+`npm run preview`, e teste a instalação e o carregamento sem rede no navegador.
 
 ## Arquitetura
 
@@ -31,7 +41,9 @@ revisão de `src/data/questions.json`.
   array de navegação em `src/components/Layout.jsx`.
 - `Layout` fornece cabeçalho, navegação, seletor de tema, cronômetro e rodapé.
   O cronômetro só é ativo quando a página atual é `quiz`.
-- `Quiz` consome `data.questions`, controla a questão atual, bloqueia a
+- `ExamSelection` deriva os exames disponíveis de `data.questions`; `App`
+  filtra o exame selecionado e limita cada sessão às primeiras 80 questões.
+- `Quiz` recebe essa lista filtrada, controla a questão atual, bloqueia a
   alternativa após a seleção, calcula acertos e chama `saveAttempt` ao concluir.
   `App` persiste as tentativas na chave `oab-attempts`.
 - `Dashboard` lê as tentativas já persistidas e calcula totais, acertos, erros,
@@ -41,11 +53,13 @@ revisão de `src/data/questions.json`.
   `Research` é uma página separada para a análise de `docs/pesquisa.pdf`; ela
   não deve ser usada como fonte das questões.
 - `src/hooks/useLocalStorage.js` é o helper compartilhado para ler/gravar JSON
-  em `localStorage`, tolerando armazenamento indisponível ou dados inválidos.
+  em `localStorage`, retornando o valor inicial quando os dados são inválidos
+  ou o armazenamento não está disponível.
 - `Timer` usa um deadline persistido (`oab-timer-deadline`) e `startedAt`
-  (`oab-timer-started-at`) para contar cinco horas sem depender de renderizações.
-  Minimizar ou esconder muda somente a apresentação. O reset de uma nova
-  tentativa usa o evento local `oab:timer-reset`.
+  (`oab-timer-started-at`) e um marcador de pausa (`oab-timer-paused-at`) para
+  contar cinco horas sem depender de renderizações. Minimizar ou esconder muda
+  somente a apresentação. O reset de uma nova tentativa usa o evento local
+  `oab:timer-reset`.
 - `src/data/questions.json` é importado em build e precisa manter o formato
   `{ questions: [...] }`. Cada questão deve possuir `id`, `subject`, `question`,
   `options`, `answer` (índice numérico) e `explanation`.
@@ -60,15 +74,21 @@ heurística: revise enunciados, alternativas, gabaritos e justificativas antes
 de considerar o banco pronto. `docs/pesquisa.pdf` alimenta a página de pesquisa,
 não o banco de questões.
 
-Ao alterar o formato dos dados, atualize simultaneamente o script de preparação,
-o placeholder/arquivo `src/data/questions.json`, `Quiz`, `Search` e a
-documentação do README. Não substitua dados revisados por uma nova extração
-heurística sem verificar o diff.
+O script percorre todos os PDFs de `docs/`, grava metadados e textos
+estruturados em `src/data/extracted/` e substitui `src/data/questions.json`
+com `{ questions: [...] }`. A associação de respostas procura a seção `PROVA
+TIPO 1` do gabarito e converte A–E para índices numéricos; questões sem
+gabarito recebem `answer: null`. Ao alterar o formato dos dados, atualize
+simultaneamente o script de preparação, `src/data/questions.json`, `Quiz`,
+`Search` e a documentação do README. Não substitua dados revisados por uma
+nova extração heurística sem verificar o diff.
 
 ## PWA e assets
 
 - `vite.config.js` configura `vite-plugin-pwa` e emite o PDF de pesquisa em
-  `docs/pesquisa.pdf` no build. O plugin também serve esse PDF no modo dev.
+  `docs/pesquisa.pdf` no build. O plugin local `serve-research-pdf` também
+  atende esse arquivo em `/docs/pesquisa.pdf` no modo dev; preserve esse
+  caminho ao alterar a página `Research`.
 - O manifest usa `public/favicon.svg`; mantenha esse asset disponível ao
   alterar os metadados do PWA.
 - O teste manual do PWA deve usar `npm run build` e `npm run preview`, abrir a
@@ -87,3 +107,10 @@ heurística sem verificar o diff.
 - A interface é deliberadamente simples e responsiva, com controles compactos
   para navegação, tema e cronômetro. Componentes novos devem funcionar em telas
   estreitas sem exigir dependências de backend.
+- O CSS combina diretivas Tailwind com CSS próprio em um único arquivo; o
+  projeto não usa utilitários Tailwind diretamente nos componentes. Preserve os
+  seletores existentes (`primary`, `secondary`, `panel`, `stats`, `dark`,
+  `quiz-card` etc.) ao ajustar a UI.
+- O projeto usa `React.StrictMode` em `src/main.jsx`; efeitos que inicializam
+  persistência, timers ou listeners devem ser seguros para a montagem de
+  desenvolvimento repetida.
