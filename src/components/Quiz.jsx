@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { resetTimer } from "../utils/timer";
 
 export default function Quiz({
   questions,
@@ -42,15 +43,7 @@ export default function Quiz({
     )
       return;
     const now = Date.now();
-    setStartedAt(now);
-    const deadline = now + 5 * 60 * 60 * 1000;
-    localStorage.setItem("oab-timer-deadline", JSON.stringify(deadline));
-    localStorage.removeItem("oab-timer-paused-at");
-    window.dispatchEvent(
-      new CustomEvent("oab:timer-reset", {
-        detail: { startedAt: now, deadline },
-      }),
-    );
+    setStartedAt(resetTimer(now).startedAt);
     setIndex(0);
     setSelected(null);
     setCorrect(0);
@@ -98,18 +91,7 @@ export default function Quiz({
         <button
           className="primary"
           onClick={() => {
-            const now = Date.now();
-            setStartedAt(now);
-            const deadline = now + 5 * 60 * 60 * 1000;
-            localStorage.setItem(
-              "oab-timer-deadline",
-              JSON.stringify(deadline),
-            );
-            window.dispatchEvent(
-              new CustomEvent("oab:timer-reset", {
-                detail: { startedAt: now, deadline },
-              }),
-            );
+            setStartedAt(resetTimer().startedAt);
             setIndex(0);
             setSelected(null);
             setCorrect(0);

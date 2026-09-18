@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import Layout from "./components/Layout";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { clearTimer } from "./utils/timer";
 import "./home.css";
 
 const Quiz = lazy(() => import("./components/Quiz"));
@@ -216,9 +217,7 @@ export default function App() {
     };
   }, [page]);
   const selectExam = (exam) => {
-    localStorage.removeItem("oab-timer-deadline");
-    localStorage.removeItem("oab-timer-started-at");
-    localStorage.removeItem("oab-timer-paused-at");
+    clearTimer();
     setSelectedExam(exam);
     setQuizPaused(false);
   };
@@ -229,9 +228,7 @@ export default function App() {
       )
     )
       return;
-    localStorage.removeItem("oab-timer-deadline");
-    localStorage.removeItem("oab-timer-started-at");
-    localStorage.removeItem("oab-timer-paused-at");
+    clearTimer();
     setSelectedExam(null);
     setQuizPaused(false);
     setPage("quiz");

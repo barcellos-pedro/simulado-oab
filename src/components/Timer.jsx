@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import {
+  clearTimer,
+  resetTimer,
+  TIMER_DURATION_SECONDS,
+  TIMER_RESET_EVENT,
+} from "../utils/timer";
 
-const FIVE_HOURS = 5 * 60 * 60;
 export default function Timer({ active, paused }) {
   const [deadline, setDeadline] = useLocalStorage("oab-timer-deadline", null);
   const [startedAt, setStartedAt] = useLocalStorage(
     "oab-timer-started-at",
     null,
   );
-  const [remaining, setRemaining] = useState(FIVE_HOURS);
+  const [remaining, setRemaining] = useState(TIMER_DURATION_SECONDS);
   const [minimized, setMinimized] = useState(false);
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
     if (!active) {
+      clearTimer();
       setDeadline(null);
       setStartedAt(null);
-      localStorage.removeItem("oab-timer-paused-at");
     } else if (!deadline) {
       const now = Date.now();
-      setDeadline(now + FIVE_HOURS * 1000);
-      setStartedAt(now);
+      const timer = resetTimer(now);
+      setDeadline(timer.deadline);
+      setStartedAt(timer.startedAt);
     }
   }, [active, deadline, setDeadline, setStartedAt]);
   useEffect(() => {
@@ -44,11 +50,11 @@ export default function Timer({ active, paused }) {
   }, [active, paused, deadline]);
   useEffect(() => {
     const reset = (event) => {
-      setRemaining(FIVE_HOURS);
+      setRemaining(TIMER_DURATION_SECONDS);
       setDeadline(event.detail.deadline);
     };
-    window.addEventListener("oab:timer-reset", reset);
-    return () => window.removeEventListener("oab:timer-reset", reset);
+    window.addEventListener(TIMER_RESET_EVENT, reset);
+    return () => window.removeEventListener(TIMER_RESET_EVENT, reset);
   }, [setDeadline]);
   const time = `${String(Math.floor(remaining / 3600)).padStart(2, "0")}:${String(Math.floor((remaining % 3600) / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`;
   if (!active) return null;
