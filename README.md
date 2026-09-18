@@ -1,4 +1,5 @@
 <div align="center">
+
   <img src="public/favicon.svg" alt="" width="72" />
 
 # Estudos OAB
@@ -11,6 +12,8 @@
 
 [Recursos](#recursos) · [Início rápido](#início-rápido) · [Comandos](#comandos) · [Conteúdo](#conteúdo) · [PWA e offline](#pwa-e-offline)
 </div>
+
+<img src="public/preview.jpg" alt="Prévia da aplicação Estudos OAB" width="100%" />
 
 Estudos OAB é uma aplicação web instalável para praticar as questões dos 45º,
 46º e 47º Exames Unificados. O quiz, as explicações, o histórico e o estado do
