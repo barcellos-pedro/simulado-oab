@@ -86,7 +86,7 @@ function parseQuestions(text, examNumber, answerKey) {
       options,
       answer,
       answerLetter,
-      explanation: 'Justificativa pendente de revisão editorial.'
+      explanation: ''
     })
   }
 
