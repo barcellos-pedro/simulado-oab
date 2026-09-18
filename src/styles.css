@@ -409,13 +409,14 @@ body {
   margin: 72px auto;
 }
 .quiz-card h1 {
+  margin-bottom: 36px;
   font-size: 20px;
   line-height: 1.45;
 }
 .options {
   display: grid;
   gap: 10px;
-  margin: 26px 0;
+  margin: 0 0 26px;
 }
 .option {
   display: flex;
@@ -601,6 +602,7 @@ footer {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+  margin-bottom: 32px;
 }
 .quiz-toolbar .eyebrow {
   margin-bottom: 0;
@@ -612,8 +614,24 @@ footer {
   justify-content: flex-end;
 }
 .quiz-controls .secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 7px 10px;
   font-size: 12px;
+}
+.quiz-card:fullscreen {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  overflow-y: auto;
+  padding: clamp(24px, 6vw, 72px) clamp(18px, 8vw, 120px);
+  background: #f8fafc;
+}
+.dark .quiz-card:fullscreen {
+  background: #101622;
 }
 .quiz-controls .danger {
   color: #c94b55;

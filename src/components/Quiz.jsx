@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { Maximize2, Minimize2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { resetTimer } from "../utils/timer";
 
@@ -15,6 +16,8 @@ export default function Quiz({
   const [selected, setSelected] = useState(null);
   const [done, setDone] = useState(false);
   const [correct, setCorrect] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const quizRef = useRef(null);
   const [startedAt, setStartedAt] = useLocalStorage(
     "oab-timer-started-at",
     null,
@@ -22,6 +25,39 @@ export default function Quiz({
   useEffect(() => {
     if (!startedAt) setStartedAt(Date.now());
   }, [startedAt, setStartedAt]);
+  useEffect(() => {
+    const updateFullscreenState = () => {
+      setIsFullscreen(document.fullscreenElement === quizRef.current);
+    };
+    const handleFullscreenShortcut = (event) => {
+      if (event.key.toLowerCase() === "f") {
+        if (!document.fullscreenEnabled || !quizRef.current) return;
+        event.preventDefault();
+        if (document.fullscreenElement === quizRef.current) {
+          document.exitFullscreen().catch(() => {});
+        } else {
+          quizRef.current.requestFullscreen().catch(() => {});
+        }
+      }
+      if (
+        event.key === "Escape" &&
+        document.fullscreenElement === quizRef.current
+      ) {
+        event.preventDefault();
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+
+    document.addEventListener("fullscreenchange", updateFullscreenState);
+    document.addEventListener("keydown", handleFullscreenShortcut);
+    return () => {
+      document.removeEventListener("fullscreenchange", updateFullscreenState);
+      document.removeEventListener("keydown", handleFullscreenShortcut);
+      if (document.fullscreenElement === quizRef.current) {
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+  }, []);
   const q = questions[index];
   if (!questions.length)
     return (
@@ -82,6 +118,14 @@ export default function Quiz({
   const hasRealExplanation =
     explanationText.length > 0 &&
     !/pendente de revisão editorial/i.test(explanationText);
+  const toggleFullscreen = () => {
+    if (!document.fullscreenEnabled || !quizRef.current) return;
+    if (document.fullscreenElement === quizRef.current) {
+      document.exitFullscreen().catch(() => {});
+      return;
+    }
+    quizRef.current.requestFullscreen().catch(() => {});
+  };
   if (done)
     return (
       <section className="empty-state">
@@ -103,7 +147,10 @@ export default function Quiz({
       </section>
     );
   return (
-    <section className={`quiz-card ${paused ? "quiz-paused" : ""}`}>
+    <section
+      ref={quizRef}
+      className={`quiz-card ${paused ? "quiz-paused" : ""}`}
+    >
       <div className="quiz-toolbar">
         <span className="eyebrow">
           Exame {exam} · Questão {index + 1} de {questions.length} · {q.subject}
@@ -114,6 +161,17 @@ export default function Quiz({
           </button>
           <button className="secondary" onClick={restart}>
             Reiniciar
+          </button>
+          <button
+            className="secondary quiz-fullscreen"
+            onClick={toggleFullscreen}
+            aria-label={
+              isFullscreen ? "Sair da tela cheia" : "Ativar tela cheia"
+            }
+            title={isFullscreen ? "Sair da tela cheia" : "Ativar tela cheia"}
+          >
+            {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+            {isFullscreen ? "Sair da tela cheia" : "Tela cheia"}
           </button>
           <button className="secondary danger" onClick={onExit}>
             Sair
