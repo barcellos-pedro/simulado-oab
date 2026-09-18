@@ -306,12 +306,7 @@
       "number": 21,
       "subject": "Não classificada",
       "question": "Hector, cidadão espanhol, chega ao Brasil, em janeiro de 2024, para passar as férias de verão em Salvador. Contudo, é proibido de ingressar no país pela Polícia Federal do Aeroporto Internacional de Salvador, porque, em janeiro de 2020, Hector foi expulso do Brasil e tal medida fora conjugada com o impedimento de reingresso por cinco anos. Sobre a hipótese apresentada, assinale a opção que indica, corretamente, a medida de retirada compulsória a ser aplicada a Hector.",
-      "options": [
-        "Extradição.",
-        "Expulsão.",
-        "Deportação.",
-        "Repatriação."
-      ],
+      "options": ["Extradição.", "Expulsão.", "Deportação.", "Repatriação."],
       "answer": 3,
       "answerLetter": "D"
     },
@@ -1521,12 +1516,7 @@
       "number": 22,
       "subject": "Não classificada",
       "question": "François, cidadão francês, residente e domiciliado na Holanda, e Maria, cidadã brasileira, residente e domiciliada na França, são casados. Conheceram-se na Alemanha, onde concluíram o doutorado em Direito Internacional na Universidade de Frankfurt. Os nubentes eram domiciliados na Alemanha na ocasião do casamento e tiveram em Frankfurt o seu primeiro domicílio conjugal. Posteriormente, mudaram-se para países diferentes por razões profissionais. Após alguns meses, resolveram não dar continuidade ao casamento. Maria pretende ajuizar ação de divórcio no Brasil porque está prestes a retornar ao seu país de origem. Sobre a hipótese, assinale a opção que indica a lei que será aplicada ao regime de bens de acordo com a legislação brasileira, em especial a Lei de Introdução às Normas do Direito Brasileiro.",
-      "options": [
-        "Francesa.",
-        "Brasileira.",
-        "Alemã.",
-        "Holandesa."
-      ],
+      "options": ["Francesa.", "Brasileira.", "Alemã.", "Holandesa."],
       "answer": 2,
       "answerLetter": "C"
     },

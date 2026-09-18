@@ -28,13 +28,13 @@ npm run preview
 
 Comandos disponíveis:
 
-| Comando | Finalidade |
-| --- | --- |
-| `npm install` | Instala as dependências |
+| Comando                   | Finalidade                                     |
+| ------------------------- | ---------------------------------------------- |
+| `npm install`             | Instala as dependências                        |
 | `npm run prepare:content` | Extrai os PDFs e atualiza os JSONs de conteúdo |
-| `npm run dev` | Inicia o Vite em modo de desenvolvimento |
-| `npm run build` | Gera a build de produção e os artefatos PWA |
-| `npm run preview` | Serve a build de produção localmente |
+| `npm run dev`             | Inicia o Vite em modo de desenvolvimento       |
+| `npm run build`           | Gera a build de produção e os artefatos PWA    |
+| `npm run preview`         | Serve a build de produção localmente           |
 
 ## Funcionalidades
 

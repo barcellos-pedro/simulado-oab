@@ -310,12 +310,7 @@
       "number": 21,
       "subject": "Não classificada",
       "question": "Hector, cidadão espanhol, chega ao Brasil, em janeiro de 2024, para passar as férias de verão em Salvador. Contudo, é proibido de ingressar no país pela Polícia Federal do Aeroporto Internacional de Salvador, porque, em janeiro de 2020, Hector foi expulso do Brasil e tal medida fora conjugada com o impedimento de reingresso por cinco anos. Sobre a hipótese apresentada, assinale a opção que indica, corretamente, a medida de retirada compulsória a ser aplicada a Hector.",
-      "options": [
-        "Extradição.",
-        "Expulsão.",
-        "Deportação.",
-        "Repatriação."
-      ],
+      "options": ["Extradição.", "Expulsão.", "Deportação.", "Repatriação."],
       "answer": 3,
       "answerLetter": "D"
     },

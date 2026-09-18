@@ -325,12 +325,7 @@
       "number": 22,
       "subject": "Não classificada",
       "question": "François, cidadão francês, residente e domiciliado na Holanda, e Maria, cidadã brasileira, residente e domiciliada na França, são casados. Conheceram-se na Alemanha, onde concluíram o doutorado em Direito Internacional na Universidade de Frankfurt. Os nubentes eram domiciliados na Alemanha na ocasião do casamento e tiveram em Frankfurt o seu primeiro domicílio conjugal. Posteriormente, mudaram-se para países diferentes por razões profissionais. Após alguns meses, resolveram não dar continuidade ao casamento. Maria pretende ajuizar ação de divórcio no Brasil porque está prestes a retornar ao seu país de origem. Sobre a hipótese, assinale a opção que indica a lei que será aplicada ao regime de bens de acordo com a legislação brasileira, em especial a Lei de Introdução às Normas do Direito Brasileiro.",
-      "options": [
-        "Francesa.",
-        "Brasileira.",
-        "Alemã.",
-        "Holandesa."
-      ],
+      "options": ["Francesa.", "Brasileira.", "Alemã.", "Holandesa."],
       "answer": 2,
       "answerLetter": "C"
     },
